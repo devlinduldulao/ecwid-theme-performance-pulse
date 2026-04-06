@@ -100,7 +100,16 @@ function handleAppInstalled(storeId) {
 
 function handleAppUninstalled(storeId) {
   console.log(`[app.uninstalled] App uninstalled from store ${storeId}`);
-  // TODO: Clean up resources, revoke tokens, etc.
+  // Clean up: delete app storage data for this store via the Ecwid API.
+  // In a no-backend static deployment the storefront code checks
+  // the 'enabled' flag in public config, so there is nothing to revoke
+  // server-side.  If you add a backend token store, revoke here:
+  //
+  //   const api = new EcwidApi(storeId, storedToken);
+  //   await api.request('/storage/theme-performance-pulse', { method: 'DELETE' });
+  //
+  // With static hosting (default), Ecwid automatically removes
+  // the app's storage entries when the app is uninstalled.
 }
 
 module.exports = router;

@@ -23,8 +23,13 @@ function requireAuth(req, res, next) {
     return res.status(401).json({ error: 'Empty token' });
   }
 
-  // TODO: Replace with real token validation (JWT verify, database lookup, etc.)
-  // For the boilerplate, we accept any non-empty token.
+  // NOTE: In the current static-hosting deployment model, the server
+  // routes are legacy reference material (see AGENTS.md).  If you adopt
+  // a backend, replace this with real validation — e.g. JWT verify with
+  // Ecwid's signing key, or a database/session lookup.
+  //
+  // For now, accept any non-empty token so the reference routes remain
+  // functional during local development.
   req.accessToken = token;
   next();
 }

@@ -23,7 +23,8 @@
     "iconSource": "assets/marketplace/icon.svg",
     "iconPng": "assets/marketplace/raster/icon-512.png",
     "listingBannerSource": "assets/marketplace/banner.svg",
-    "listingBannerPng": "assets/marketplace/raster/banner-1600x900.png"
+    "listingBannerPng": "assets/marketplace/raster/banner-1600x900.png",
+    "listingHeaderPng": "assets/marketplace/raster/header-1024x538.png"
   },
   "technicalNotes": {
     "hosting": "Static HTTPS hosting",

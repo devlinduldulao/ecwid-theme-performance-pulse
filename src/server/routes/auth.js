@@ -21,14 +21,11 @@ router.get('/install', (req, res) => {
     return res.status(500).send('OAuth not configured — set ECWID_CLIENT_ID and ECWID_REDIRECT_URI in .env');
   }
 
+  // Only request scopes the app actually uses:
+  //   read_store_profile  — read store metadata for storefront URL
+  //   customize_storefront — inject optional storefront helper assets
   const scopes = [
     'read_store_profile',
-    'read_catalog',
-    'update_catalog',
-    'read_orders',
-    'update_orders',
-    'read_customers',
-    'read_discount_coupons',
     'customize_storefront',
   ].join('+');
 
@@ -69,7 +66,12 @@ router.get('/callback', async (req, res) => {
     const tokenData = await tokenResponse.json();
 
     if (tokenData.access_token) {
-      // TODO: Persist the token securely (database, encrypted store, etc.)
+      // In the static-hosting deployment model (default), the admin
+      // dashboard receives the access token through the EcwidApp iframe
+      // payload — no server-side persistence is needed.
+      //
+      // If you adopt a backend, store the token securely here:
+      //   await db.upsertToken(tokenData.store_id, tokenData.access_token);
       console.log('OAuth success — Store ID:', tokenData.store_id);
 
       res.send(
