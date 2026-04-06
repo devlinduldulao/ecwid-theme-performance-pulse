@@ -9,6 +9,7 @@ const marketplaceRoot = path.join(projectRoot, 'assets', 'marketplace');
 const docsRoot = path.join(projectRoot, 'docs');
 const publishConfigPath = path.join(projectRoot, 'app-listing.config.json');
 const publishConfigTemplatePath = path.join(projectRoot, 'app-listing.config.template.json');
+const publishingProfilePath = path.join(projectRoot, 'config', 'publishing-profile.json');
 
 const RASTER_ASSETS = [
   { source: 'icon.svg', output: 'icon-512.png', width: 512, height: 512 },
@@ -68,14 +69,108 @@ function readPackageVersion() {
   return packageJson.version;
 }
 
-function readPublishConfig() {
-  const sourcePath = fs.existsSync(publishConfigPath) ? publishConfigPath : publishConfigTemplatePath;
-
-  if (!fs.existsSync(sourcePath)) {
+function readJsonFile(filePath) {
+  if (!fs.existsSync(filePath)) {
     return {};
   }
 
-  return JSON.parse(fs.readFileSync(sourcePath, 'utf8'));
+  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+}
+
+function toAbsoluteUrl(baseUrl, value) {
+  if (typeof value !== 'string' || value.length === 0) {
+    return undefined;
+  }
+
+  if (/^https?:\/\//i.test(value)) {
+    return value;
+  }
+
+  if (typeof baseUrl !== 'string' || baseUrl.length === 0) {
+    return value;
+  }
+
+  if (value.startsWith('/')) {
+    return `${baseUrl.replace(/\/$/, '')}${value}`;
+  }
+
+  return new URL(value, `${baseUrl.replace(/\/$/, '')}/`).toString();
+}
+
+function normalizePublishingProfile(profile) {
+  const source = profile && typeof profile === 'object' ? profile : {};
+  const hostBaseUrl = typeof source.hostBaseUrl === 'string' ? source.hostBaseUrl : undefined;
+  const normalized = {};
+
+  if (typeof source.appName === 'string') {
+    normalized.name = source.appName;
+  }
+
+  if (typeof source.shortDescription === 'string') {
+    normalized.shortDescription = source.shortDescription;
+  }
+
+  if (typeof source.category === 'string') {
+    normalized.category = source.category;
+  }
+
+  const appPageUrl = toAbsoluteUrl(hostBaseUrl, source.demoUrl);
+  const supportUrl = toAbsoluteUrl(hostBaseUrl, source.supportUrl);
+  const privacyPolicyUrl = toAbsoluteUrl(hostBaseUrl, source.privacyPolicyUrl);
+  const termsOfServiceUrl = toAbsoluteUrl(hostBaseUrl, source.termsOfServiceUrl);
+
+  if (appPageUrl) {
+    normalized.appPageUrl = appPageUrl;
+  }
+
+  if (supportUrl) {
+    normalized.supportUrl = supportUrl;
+  }
+
+  if (privacyPolicyUrl) {
+    normalized.privacyPolicyUrl = privacyPolicyUrl;
+  }
+
+  if (termsOfServiceUrl) {
+    normalized.termsOfServiceUrl = termsOfServiceUrl;
+  }
+
+  [
+    'tagline',
+    'hostBaseUrl',
+    'businessName',
+    'supportEmail',
+    'supportResponseWindow',
+    'supportTimezone',
+    'legalEffectiveDate',
+    'privacyContactBlurb',
+    'termsWarrantyBlurb',
+    'screenshots',
+    'technicalNotes',
+  ].forEach((key) => {
+    if (key in source) {
+      normalized[key] = source[key];
+    }
+  });
+
+  return normalized;
+}
+
+function readPublishConfig() {
+  const templateConfig = readJsonFile(publishConfigTemplatePath);
+  const publishingProfile = normalizePublishingProfile(readJsonFile(publishingProfilePath));
+
+  if (fs.existsSync(publishConfigPath)) {
+    return {
+      ...templateConfig,
+      ...readJsonFile(publishConfigPath),
+    };
+  }
+
+  return {
+    ...templateConfig,
+    ...publishingProfile,
+  };
 }
 
 function applyPublishConfig(baseTemplate, overrides) {
@@ -203,6 +298,7 @@ module.exports = {
   SCREENSHOT_ASSETS,
   buildPublishBundle,
   createListingTemplate,
+  normalizePublishingProfile,
   readPublishConfig,
   renderPng,
 };

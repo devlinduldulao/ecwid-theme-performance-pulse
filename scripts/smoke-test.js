@@ -84,6 +84,33 @@ async function run() {
       }
     });
 
+    await test('Support page loads', async () => {
+      const response = await fetch(`${baseUrl}/public/support.html`);
+      const body = await response.text();
+
+      if (response.status !== 200 || !body.includes('Theme Performance Pulse support covers')) {
+        throw new Error('support page did not load expected content');
+      }
+    });
+
+    await test('Privacy policy page loads', async () => {
+      const response = await fetch(`${baseUrl}/public/privacy.html`);
+      const body = await response.text();
+
+      if (response.status !== 200 || !body.includes('static owner dashboard for Ecwid merchants')) {
+        throw new Error('privacy page did not load expected content');
+      }
+    });
+
+    await test('Terms page loads', async () => {
+      const response = await fetch(`${baseUrl}/public/terms.html`);
+      const body = await response.text();
+
+      if (response.status !== 200 || !body.includes('Terms of Service')) {
+        throw new Error('terms page did not load expected content');
+      }
+    });
+
     await test('Shared monitoring core is reachable', async () => {
       const response = await fetch(`${baseUrl}/src/shared/pulse-core.js`);
       const body = await response.text();

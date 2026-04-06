@@ -1,0 +1,36 @@
+{
+  "appName": "Theme Performance Pulse for Ecwid",
+  "tagline": "Merchant-facing PageSpeed audit dashboard for Ecwid storefronts.",
+  "shortDescription": "Save storefront audit targets, run on-demand PageSpeed checks, and review high-signal performance issues without a production database or long-running backend.",
+  "category": "Analytics & reporting / merchant tools",
+  "hostBaseUrl": "https://devlinduldulao.github.io/ecwid-theme-performance-pulse",
+  "businessName": "Configured marketplace publisher",
+  "supportEmail": "",
+  "supportResponseWindow": "Reply within 2 business days",
+  "supportTimezone": "UTC",
+  "supportUrl": "/public/support.html",
+  "privacyPolicyUrl": "/public/privacy.html",
+  "termsOfServiceUrl": "/public/terms.html",
+  "demoUrl": "/public/index.html",
+  "legalEffectiveDate": "2026-04-06",
+  "privacyContactBlurb": "Contact the support channel listed in the live marketplace listing for privacy requests.",
+  "termsWarrantyBlurb": "This app is provided as described in the active marketplace listing and any separate merchant agreement published with the app.",
+  "screenshots": [
+    "assets/marketplace/screenshot-owner-dashboard.png",
+    "assets/marketplace/screenshot-preview-mode.png"
+  ],
+  "assets": {
+    "iconSource": "assets/marketplace/icon.svg",
+    "iconPng": "assets/marketplace/raster/icon-512.png",
+    "listingBannerSource": "assets/marketplace/banner.svg",
+    "listingBannerPng": "assets/marketplace/raster/banner-1600x900.png"
+  },
+  "technicalNotes": {
+    "hosting": "Static HTTPS hosting",
+    "backendRequired": false,
+    "databaseRequired": false,
+    "redisRequired": false,
+    "primarySurface": "Merchant dashboard",
+    "storefrontBehavior": "Owner-triggered PageSpeed audits with optional storefront helper assets"
+  }
+}

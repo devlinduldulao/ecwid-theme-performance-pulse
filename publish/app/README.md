@@ -123,6 +123,14 @@ Host the repository as static files on a free host such as GitHub Pages, Netlify
 
 - app page URL: `https://your-host/public/index.html`
 
+For this GitHub repository, the default GitHub Pages URL is:
+
+- `https://devlinduldulao.github.io/ecwid-theme-performance-pulse/public/index.html`
+
+The repository root URL also redirects to the admin dashboard after build and deployment:
+
+- `https://devlinduldulao.github.io/ecwid-theme-performance-pulse/`
+
 Optional storefront helper URLs can still point at:
 
 - `https://your-host/src/storefront/custom-storefront.js`

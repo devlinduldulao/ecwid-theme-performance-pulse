@@ -12,6 +12,7 @@ const {
 const {
   applyPublishConfig,
   createListingTemplate,
+  normalizePublishingProfile,
 } = require('../scripts/build-publish-bundle');
 
 test('assertValidVersion rejects invalid semver input', () => {
@@ -80,4 +81,25 @@ test('applyPublishConfig merges listing overrides without dropping generated ass
   assert.deepEqual(merged.features, ['Custom feature']);
   assert.equal(merged.assets.png[0], 'assets/marketplace/raster/icon-512.png');
   assert.equal(merged.assets.screenshots[0], 'assets/marketplace/screenshot-owner-dashboard.png');
+});
+
+test('normalizePublishingProfile expands relative public URLs from hostBaseUrl', () => {
+  const normalized = normalizePublishingProfile({
+    appName: 'Theme Performance Pulse for Ecwid',
+    shortDescription: 'Merchant-facing PageSpeed dashboard',
+    category: 'Analytics & reporting / merchant tools',
+    hostBaseUrl: 'https://devlinduldulao.github.io/ecwid-theme-performance-pulse',
+    demoUrl: '/public/index.html',
+    supportUrl: '/public/support.html',
+    privacyPolicyUrl: '/public/privacy.html',
+    termsOfServiceUrl: '/public/terms.html',
+    supportTimezone: 'UTC',
+  });
+
+  assert.equal(normalized.name, 'Theme Performance Pulse for Ecwid');
+  assert.equal(normalized.appPageUrl, 'https://devlinduldulao.github.io/ecwid-theme-performance-pulse/public/index.html');
+  assert.equal(normalized.supportUrl, 'https://devlinduldulao.github.io/ecwid-theme-performance-pulse/public/support.html');
+  assert.equal(normalized.privacyPolicyUrl, 'https://devlinduldulao.github.io/ecwid-theme-performance-pulse/public/privacy.html');
+  assert.equal(normalized.termsOfServiceUrl, 'https://devlinduldulao.github.io/ecwid-theme-performance-pulse/public/terms.html');
+  assert.equal(normalized.supportTimezone, 'UTC');
 });

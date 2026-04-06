@@ -26,6 +26,14 @@ app-listing.config.json
 
 using `app-listing.config.template.json` as the starting point.
 
+Alternatively, keep your broader marketplace metadata in:
+
+```text
+config/publishing-profile.json
+```
+
+When `app-listing.config.json` is not present, `npm run publish:bundle` will derive the publish metadata from that profile instead.
+
 ## 3. Validate everything
 
 Run:

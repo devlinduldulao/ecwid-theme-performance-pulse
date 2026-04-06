@@ -25,6 +25,8 @@ This repo is now prepared for a static Ecwid app submission, but a few store-spe
 
 You can keep these values in `app-listing.config.json` so `npm run publish:bundle` injects them into the generated listing metadata automatically.
 
+If you prefer a richer marketplace profile format, this repo also supports `config/publishing-profile.json`. When `app-listing.config.json` is absent, `npm run publish:bundle` reads the publishing profile and derives the hosted app page, support URL, privacy policy URL, and related submission metadata from it.
+
 ## Ecwid market request and app review inputs
 
 For Ecwid's market request form and app review workflow, these values are typically safe to provide:
@@ -100,6 +102,12 @@ Run the local app, refresh the marketplace screenshots when the UI changes, then
 
 - privacy policy: `docs/PRIVACY.md`
 - support policy: `docs/SUPPORT.md`
+
+This repo also ships static public policy pages for GitHub Pages or other static hosts:
+
+- `public/privacy.html`
+- `public/support.html`
+- `public/terms.html`
 
 Host these pages somewhere public and use their HTTPS URLs in your submission.
 

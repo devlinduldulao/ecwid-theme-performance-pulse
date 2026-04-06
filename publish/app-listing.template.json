@@ -1,13 +1,13 @@
 {
-  "name": "Theme Performance Pulse",
+  "name": "Theme Performance Pulse for Ecwid",
   "slug": "theme-performance-pulse-ecwid",
   "version": "1.2.0",
-  "appPageUrl": "https://your-host.example/public/index.html",
-  "supportUrl": "https://your-host.example/support",
-  "privacyPolicyUrl": "https://your-host.example/privacy",
-  "category": "Analytics & Reporting",
+  "appPageUrl": "https://devlinduldulao.github.io/ecwid-theme-performance-pulse/public/index.html",
+  "supportUrl": "https://devlinduldulao.github.io/ecwid-theme-performance-pulse/public/support.html",
+  "privacyPolicyUrl": "https://devlinduldulao.github.io/ecwid-theme-performance-pulse/public/privacy.html",
+  "category": "Analytics & reporting / merchant tools",
   "pricingModel": "Free",
-  "shortDescription": "Audit your Ecwid storefront from the owner dashboard with live PageSpeed checks and a preview demo mode.",
+  "shortDescription": "Save storefront audit targets, run on-demand PageSpeed checks, and review high-signal performance issues without a production database or long-running backend.",
   "features": [
     "Owner-side dashboard inside Ecwid admin",
     "Preview demo mode with fake sample data",
@@ -31,5 +31,27 @@
   "notes": [
     "Replace placeholder URLs before submission.",
     "If you create app-listing.config.json, it will override this template during npm run publish:bundle."
-  ]
+  ],
+  "termsOfServiceUrl": "https://devlinduldulao.github.io/ecwid-theme-performance-pulse/public/terms.html",
+  "tagline": "Merchant-facing PageSpeed audit dashboard for Ecwid storefronts.",
+  "hostBaseUrl": "https://devlinduldulao.github.io/ecwid-theme-performance-pulse",
+  "businessName": "Configured marketplace publisher",
+  "supportEmail": "",
+  "supportResponseWindow": "Reply within 2 business days",
+  "supportTimezone": "UTC",
+  "legalEffectiveDate": "2026-04-06",
+  "privacyContactBlurb": "Contact the support channel listed in the live marketplace listing for privacy requests.",
+  "termsWarrantyBlurb": "This app is provided as described in the active marketplace listing and any separate merchant agreement published with the app.",
+  "screenshots": [
+    "assets/marketplace/screenshot-owner-dashboard.png",
+    "assets/marketplace/screenshot-preview-mode.png"
+  ],
+  "technicalNotes": {
+    "hosting": "Static HTTPS hosting",
+    "backendRequired": false,
+    "databaseRequired": false,
+    "redisRequired": false,
+    "primarySurface": "Merchant dashboard",
+    "storefrontBehavior": "Owner-triggered PageSpeed audits with optional storefront helper assets"
+  }
 }
