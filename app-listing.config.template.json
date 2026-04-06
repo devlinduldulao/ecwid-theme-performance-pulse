@@ -1,0 +1,11 @@
+{
+  "appPageUrl": "https://your-host.example/public/index.html",
+  "supportUrl": "https://your-host.example/support",
+  "privacyPolicyUrl": "https://your-host.example/privacy",
+  "category": "Analytics & Reporting",
+  "pricingModel": "Free",
+  "notes": [
+    "Replace placeholder URLs before submission.",
+    "If you create app-listing.config.json, it will override this template during npm run publish:bundle."
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "theme-performance-pulse-ecwid",
+  "version": "1.2.0",
+  "description": "Static Theme Performance Pulse dashboard for Ecwid business owners with no database, Redis, or hosted Node.js server.",
+  "main": "src/shared/pulse-core.js",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "publish:bundle": "node scripts/build-publish-bundle.js",
+    "preview": "npx serve . -l 4173",
+    "release:prepare": "node scripts/prepare-release.js",
+    "test": "node --test tests/**/*.test.js && node scripts/smoke-test.js",
+    "lint": "eslint src scripts tests",
+    "storefront": "npx serve . -l 5000"
+  },
+  "keywords": [
+    "ecwid",
+    "lightspeed",
+    "ecommerce",
+    "dashboard",
+    "performance",
+    "monitoring"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "eslint": "^10.0.3",
+    "jsdom": "^29.0.0"
+  }
+}

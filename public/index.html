@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Performance Pulse for Ecwid</title>
+  <link rel="stylesheet" href="https://djqizrxa6f10j.cloudfront.net/ecwid-sdk/css/1.3.20/ecwid-app-ui.css">
+  <script src="https://djqizrxa6f10j.cloudfront.net/ecwid-sdk/js/1.2.9/ecwid-app.js"></script>
+    <style>
+    :root {
+      /* Lightspeed Brand System Colors */
+      --ls-charcoal: #15171a;
+      --ls-white: #ffffff;
+      --ls-red: #E81C24;
+      --ls-gray-light: #f5f6f8;
+      --ls-gray-border: #e0e4e8;
+      --ls-gray-muted: #6b7280;
+
+      --tpp-ink: var(--ls-charcoal);
+      --tpp-muted: var(--ls-gray-muted);
+      --tpp-surface: var(--ls-white);
+      --tpp-border: var(--ls-gray-border);
+      --tpp-accent: var(--ls-red);
+      --tpp-accent-soft: rgba(232, 28, 36, 0.08);
+      --tpp-warning: #c27803;
+      --tpp-danger: var(--ls-red);
+      --tpp-hero: var(--ls-charcoal);
+    }
+
+    body {
+      margin: 0;
+      padding: 32px 24px;
+      color: var(--tpp-ink);
+      background-color: var(--ls-gray-light);
+      font-family: "Real Text Pro", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .tpp-shell {
+      display: grid;
+      gap: 32px;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    .tpp-hero {
+      background: var(--tpp-hero);
+      color: var(--ls-white);
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 4px 24px rgba(21, 23, 26, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tpp-hero::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 15px;
+      height: 100%;
+      background: var(--ls-red);
+    }
+
+    .tpp-kicker {
+      margin: 0 0 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.8;
+      color: var(--ls-gray-light);
+    }
+
+    .tpp-hero h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+        color: var(--ls-white);
+    }
+
+    .tpp-hero p {
+      max-width: 680px;
+      margin: 16px 0 0;
+      font-size: 16px;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    .tpp-status-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .tpp-badge,
+    .tpp-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 4px;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .tpp-meta.is-preview {
+      background: rgba(232, 28, 36, 0.15);
+      color: var(--ls-white);
+      border: 1px solid rgba(232, 28, 36, 0.3);
+    }
+
+    .tpp-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+      gap: 24px;
+    }
+
+    .tpp-card {
+      background: var(--tpp-surface);
+      border: 1px solid var(--tpp-border);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(21, 23, 26, 0.04);
+      overflow: hidden;
+    }
+
+    .tpp-card__header {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--tpp-border);
+    }
+
+    .tpp-card__header h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .tpp-card__header p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--tpp-muted);
+      line-height: 1.5;
+    }
+
+    .tpp-card__body {
+      padding: 32px;
+    }
+
+    .tpp-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .tpp-field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .tpp-field--full {
+      grid-column: 1 / -1;
+    }
+
+    .tpp-field label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--tpp-ink);
+    }
+
+    .tpp-field input,
+    .tpp-field select,
+    .tpp-field textarea {
+      padding: 12px 16px;
+      border: 1px solid var(--tpp-border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 14px;
+      background: var(--tpp-surface);
+      color: var(--tpp-ink);
+      transition: all 0.2s ease;
+    }
+
+    .tpp-field input:focus,
+    .tpp-field select:focus,
+    .tpp-field textarea:focus {
+      outline: none;
+      border-color: var(--tpp-ink);
+      box-shadow: 0 0 0 1px var(--tpp-ink);
+    }
+
+    .tpp-field textarea {
+      min-height: 110px;
+      line-height: 1.5;
+      resize: vertical;
+    }
+
+    .tpp-help-text {
+      font-size: 12px;
+      color: var(--tpp-muted);
+      line-height: 1.4;
+    }
+
+    .tpp-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--tpp-border);
+    }
+
+    /* Override standard buttons for standard look */
+    .btn {
+      font-family: inherit;
+      font-weight: 500;
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+      line-height: 1;
+    }
+
+    #save-btn {
+      background: var(--tpp-ink);
+      color: var(--ls-white);
+    }
+    #save-btn:hover {
+      background: #000;
+    }
+
+    #run-audit-btn {
+      background: var(--tpp-accent);
+      color: var(--ls-white);
+    }
+    #run-audit-btn:hover {
+      background: #cc161f;
+    }
+
+    #preview-toggle-btn {
+      background: transparent;
+      color: var(--tpp-ink);
+      border-color: var(--tpp-border);
+    }
+    #preview-toggle-btn:hover {
+      border-color: var(--tpp-ink);
+    }
+
+    #status-message {
+      margin-left: auto;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .tpp-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .tpp-summary-card {
+      padding: 20px;
+      background: var(--ls-gray-light);
+      border-radius: 6px;
+      text-align: center;
+      border: 1px solid var(--tpp-border);
+      transition: transform 0.2s;
+    }
+    
+    .tpp-summary-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .tpp-summary-card span {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--tpp-muted);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .tpp-summary-card strong {
+      display: block;
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--tpp-ink);
+      line-height: 1;
+    }
+
+    .tpp-results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--tpp-border);
+      font-size: 14px;
+    }
+
+    .tpp-results-header strong {
+      font-weight: 600;
+      color: var(--tpp-ink);
+    }
+
+    .tpp-empty-state {
+      padding: 60px 40px;
+      text-align: center;
+      background: var(--ls-gray-light);
+      border: 1px dashed var(--tpp-border);
+      border-radius: 8px;
+      color: var(--tpp-muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .tpp-audit-results {
+      display: grid;
+      gap: 16px;
+    }
+
+    .tpp-audit-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: center;
+      padding: 20px;
+      background: var(--ls-white);
+      border: 1px solid var(--tpp-border);
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .tpp-audit-row:hover {
+      border-color: var(--tpp-ink);
+      box-shadow: 0 4px 12px rgba(21, 23, 26, 0.06);
+    }
+
+    .tpp-audit-row__target {
+      display: grid;
+      gap: 6px;
+    }
+
+    .tpp-audit-row__target strong {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .tpp-audit-row__target span {
+      font-size: 13px;
+      color: var(--tpp-muted);
+    }
+
+    .tpp-audit-row__metrics {
+      display: flex;
+      gap: 24px;
+    }
+
+    .tpp-audit-metric {
+      text-align: right;
+    }
+
+    .tpp-audit-metric span {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--tpp-muted);
+      margin-bottom: 4px;
+    }
+
+    .tpp-audit-metric strong {
+      display: block;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    /* Score colors */
+    .metric--good { color: #027A48; }
+    .metric--needs-improvement { color: #B54708; }
+    .metric--poor { color: #B42318; }
+    
+    .tpp-note, .tpp-code-card {
+      padding: 20px;
+      border-radius: 6px;
+      background: var(--ls-gray-light);
+      border: 1px solid var(--tpp-border);
+      margin-bottom: 16px;
+    }
+
+    .tpp-note strong, .tpp-code-card strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .tpp-note p, .tpp-code-card p {
+      margin: 0 0 12px;
+      font-size: 13px;
+      color: var(--tpp-muted);
+      line-height: 1.5;
+    }
+
+    .tpp-code-card code {
+      display: block;
+      padding: 12px;
+      background: var(--ls-white);
+      border: 1px solid var(--tpp-border);
+      border-radius: 4px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      color: var(--tpp-ink);
+      word-break: break-all;
+    }
+
+    /* Status Animations */
+    .is-loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="tpp-shell">
+    <section class="tpp-hero">
+      <p class="tpp-kicker">Ecwid Owner Dashboard</p>
+      <h1>Theme Performance Pulse</h1>
+      <p>Give Ecwid business owners a dashboard they can actually use inside admin: save storefront audit targets, run on-demand PageSpeed checks, and review the highest-signal performance issues without paying for a database, Redis, or a hosted Node.js collector.</p>
+      <div class="tpp-status-strip">
+        <div class="tpp-badge" id="connection-mode">Standalone owner preview</div>
+        <div class="tpp-meta">Store: <strong id="store-id">Not connected to an Ecwid store</strong></div>
+      </div>
+    </section>
+
+    <div class="tpp-grid">
+      <section class="tpp-card">
+        <div class="tpp-card__header">
+          <h2>Owner Settings</h2>
+          <p id="dashboard-hint">Save the storefront URLs you want to audit and choose the device strategy. This dashboard is designed for the merchant in Ecwid admin, not for public visitors.</p>
+        </div>
+        <div class="tpp-card__body">
+          <div class="tpp-form-grid">
+            <div class="tpp-field tpp-field--full">
+              <label for="app-client-id">Ecwid App Client ID</label>
+              <input id="app-client-id" type="text" placeholder="Used only if you later connect optional storefront assets through Ecwid app config.">
+            </div>
+            <div class="tpp-field">
+              <label for="storefront-base-url">Storefront Base URL</label>
+              <input id="storefront-base-url" type="url" placeholder="https://your-store.example.com/">
+            </div>
+            <div class="tpp-field">
+              <label for="audit-strategy">Audit Strategy</label>
+              <select id="audit-strategy">
+                <option value="mobile">Mobile</option>
+                <option value="desktop">Desktop</option>
+              </select>
+            </div>
+            <div class="tpp-field tpp-field--full">
+              <label for="audit-targets">Audit Targets</label>
+              <textarea id="audit-targets" placeholder="Homepage | /&#10;Category | /collections/all&#10;Product | /products/example&#10;Cart | /cart"></textarea>
+              <div class="tpp-help-text">One target per line. Use <strong>Label | URL</strong>. Relative paths are expanded from the storefront base URL.</div>
+            </div>
+            <div class="tpp-field tpp-field--full">
+              <label for="psi-api-key">Optional PageSpeed API Key</label>
+              <input id="psi-api-key" type="password" placeholder="Optional. Stays only in this browser and is never saved to Ecwid app storage.">
+            </div>
+          </div>
+
+          <div class="tpp-actions">
+            <button id="save-btn" class="btn btn-default btn-medium">Save Settings</button>
+            <button id="run-audit-btn" class="btn btn-default btn-medium">Run Audit</button>
+            <button id="preview-toggle-btn" class="btn btn-default btn-medium" type="button" aria-pressed="false">Preview Demo</button>
+            <div id="status-message"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tpp-card">
+        <div class="tpp-card__header">
+          <h2>Deployment Notes</h2>
+          <p>This package stays static-first. The owner dashboard lives in Ecwid admin, while audits run directly from the browser against PageSpeed Insights.</p>
+        </div>
+        <div class="tpp-card__body">
+          <div class="tpp-note">
+            <strong>No hosted backend required</strong>
+            <p>The merchant can save audit targets and run audits from the Ecwid dashboard. Any optional PageSpeed API key stays local to the merchant browser and is not written into Ecwid app storage.</p>
+          </div>
+          <div class="tpp-code-card">
+            <strong>Optional storefront asset URL</strong>
+            <p>This remains available only if you later decide to ship storefront helpers, but the core product is now the owner dashboard.</p>
+            <code id="asset-js-url"></code>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="tpp-card">
+      <div class="tpp-card__header">
+        <h2>Audit Results</h2>
+        <p>Run targeted checks against the URLs that matter to the business owner: home, category, product, cart, or any revenue-critical landing page.</p>
+      </div>
+      <div class="tpp-card__body">
+        <div class="tpp-summary-grid">
+          <div class="tpp-summary-card">
+            <span>Avg Performance</span>
+            <strong data-tpp-field="averagePerformance">0</strong>
+          </div>
+          <div class="tpp-summary-card">
+            <span>Avg Accessibility</span>
+            <strong data-tpp-field="averageAccessibility">0</strong>
+          </div>
+          <div class="tpp-summary-card">
+            <span>Avg SEO</span>
+            <strong data-tpp-field="averageSeo">0</strong>
+          </div>
+          <div class="tpp-summary-card">
+            <span>Audited Pages</span>
+            <strong data-tpp-field="auditedPages">0</strong>
+          </div>
+          <div class="tpp-summary-card">
+            <span>Critical Pages</span>
+            <strong data-tpp-field="criticalPages">0</strong>
+          </div>
+        </div>
+
+        <div class="tpp-results-header">
+          <div>Latest run: <strong id="last-run-at">No audits run yet</strong></div>
+          <div id="preview-mode-badge" class="tpp-meta">Live audit results</div>
+        </div>
+
+        <div id="tpp-empty-results" class="tpp-empty-state">No audits have been run yet. Save a storefront base URL and one or more targets, then run the audit from this dashboard.</div>
+        <div id="tpp-audit-results" class="tpp-audit-results"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    window.ThemePerformancePulseAdminBootstrap = {
+      appId: 'theme-performance-pulse'
+    };
+  </script>
+  <script src="../src/shared/dashboard-core.js"></script>
+  <script src="../src/admin/app.js"></script>
+
+</body>
+</html>

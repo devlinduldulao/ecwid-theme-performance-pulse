@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Storefront Test — Theme Performance Pulse</title>
+
+  <!-- Custom storefront CSS -->
+  <link rel="stylesheet" href="../src/storefront/custom-storefront.css">
+
+  <style>
+    body {
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: linear-gradient(180deg, #f5f9f9 0%, #ffffff 100%);
+      color: #162433;
+    }
+    .dev-banner {
+      background: #edf8f6;
+      border: 1px solid rgba(15, 118, 110, 0.22);
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 24px;
+      font-size: 0.9em;
+    }
+    .dev-banner strong { color: #0f766e; }
+    h1 { margin-bottom: 8px; }
+    .subtitle { color: #5f6b76; margin-bottom: 24px; }
+  </style>
+</head>
+<body>
+
+  <!-- Development banner -->
+  <div class="dev-banner">
+    <strong>Development Mode</strong> — This page embeds the Ecwid widget for local testing.
+    Replace <code>STORE_ID</code> below with your actual Ecwid store ID. The floating panel reflects a browser-local snapshot only, which matches the no-backend version of the app.
+  </div>
+
+  <h1>Theme Performance Pulse</h1>
+  <p class="subtitle">Ecwid storefront monitoring preview</p>
+
+  <!--
+    Ecwid Storefront Widget
+    Replace STORE_ID with your actual Ecwid store ID (numeric).
+    Find it at: Ecwid Control Panel → Developers → API keys
+  -->
+  <div id="my-store-STORE_ID"></div>
+  <script>
+    xProductBrowser(
+      "categoriesPerRow=3",
+      "views=grid(20,3) list(60) table(60)",
+      "categoryView=grid",
+      "searchView=list",
+      "id=my-store-STORE_ID"
+    );
+  </script>
+  <script src="https://app.ecwid.com/script.js?STORE_ID" charset="utf-8"></script>
+
+  <!-- Custom storefront JavaScript (loaded after Ecwid) -->
+  <script>
+    window.ThemePerformancePulseEcwidConfig = {
+      publicConfig: {
+        enabled: true,
+        sampleRate: 100,
+        rollingWindowMinutes: 15,
+        maxRecentEvents: 40,
+        trackLongTasks: true,
+        trackAddToCart: true,
+        showStorefrontPanel: true,
+        panelTitle: 'Theme Performance Pulse'
+      }
+    };
+  </script>
+  <script src="../src/shared/pulse-core.js"></script>
+  <script src="../src/storefront/custom-storefront.js"></script>
+
+</body>
+</html>

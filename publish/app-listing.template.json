@@ -1,0 +1,35 @@
+{
+  "name": "Theme Performance Pulse",
+  "slug": "theme-performance-pulse-ecwid",
+  "version": "1.2.0",
+  "appPageUrl": "https://your-host.example/public/index.html",
+  "supportUrl": "https://your-host.example/support",
+  "privacyPolicyUrl": "https://your-host.example/privacy",
+  "category": "Analytics & Reporting",
+  "pricingModel": "Free",
+  "shortDescription": "Audit your Ecwid storefront from the owner dashboard with live PageSpeed checks and a preview demo mode.",
+  "features": [
+    "Owner-side dashboard inside Ecwid admin",
+    "Preview demo mode with fake sample data",
+    "Browser-run PageSpeed audits for key storefront URLs",
+    "No database, Redis, or hosted Node.js collector required"
+  ],
+  "assets": {
+    "svg": {
+      "icon": "assets/marketplace/icon.svg",
+      "banner": "assets/marketplace/banner.svg"
+    },
+    "screenshots": [
+      "assets/marketplace/screenshot-owner-dashboard.png",
+      "assets/marketplace/screenshot-preview-mode.png"
+    ],
+    "png": [
+      "assets/marketplace/raster/icon-512.png",
+      "assets/marketplace/raster/banner-1600x900.png"
+    ]
+  },
+  "notes": [
+    "Replace placeholder URLs before submission.",
+    "If you create app-listing.config.json, it will override this template during npm run publish:bundle."
+  ]
+}
