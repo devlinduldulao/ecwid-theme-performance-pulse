@@ -1,11 +1,10 @@
 const fs = require('fs');
 const path = require('path');
-const { execFileSync } = require('child_process');
 const { Resvg } = require('@resvg/resvg-js');
+const { buildStaticArtifacts, defaultDistRoot } = require('./build');
 
 const projectRoot = path.resolve(__dirname, '..');
 const publishRoot = path.join(projectRoot, 'publish');
-const distRoot = path.join(projectRoot, 'dist');
 const marketplaceRoot = path.join(projectRoot, 'assets', 'marketplace');
 const docsRoot = path.join(projectRoot, 'docs');
 const publishConfigPath = path.join(projectRoot, 'app-listing.config.json');
@@ -127,13 +126,11 @@ function createListingTemplate(version, rasterFiles) {
 function buildPublishBundle(options = {}) {
   const version = options.version || readPackageVersion();
   const outputRoot = options.outputRoot || publishRoot;
+  const buildOutputRoot = options.buildOutputRoot || defaultDistRoot;
   const publishConfig = options.publishConfig || readPublishConfig();
 
   if (!options.skipBuild) {
-    execFileSync(process.execPath, [path.join(projectRoot, 'scripts', 'build.js')], {
-      cwd: projectRoot,
-      stdio: 'inherit',
-    });
+    buildStaticArtifacts({ outputRoot: buildOutputRoot });
   }
 
   removeDirectory(outputRoot);
@@ -144,7 +141,7 @@ function buildPublishBundle(options = {}) {
   const assetsOutputRoot = path.join(outputRoot, 'assets', 'marketplace');
   const rasterOutputRoot = path.join(assetsOutputRoot, 'raster');
 
-  copyDirectory(distRoot, deployRoot);
+  copyDirectory(buildOutputRoot, deployRoot);
   ensureDirectory(docsOutputRoot);
   ensureDirectory(assetsOutputRoot);
   ensureDirectory(rasterOutputRoot);

@@ -26,15 +26,26 @@ test('createListingTemplate includes placeholder publish metadata and PNG asset 
 
 test('buildPublishBundle creates app, docs, metadata, and rasterized marketplace assets', () => {
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'tpp-publish-'));
+  const buildTempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'tpp-build-publish-'));
+  const buildOutputRoot = path.join(buildTempRoot, 'dist-build');
 
   try {
-    const result = buildPublishBundle({ outputRoot: tempRoot, version: '9.9.9', skipBuild: false });
+    const result = buildPublishBundle({
+      outputRoot: tempRoot,
+      version: '9.9.9',
+      skipBuild: false,
+      buildOutputRoot,
+    });
 
     assert.equal(result.version, '9.9.9');
+    assert.equal(fs.existsSync(path.join(tempRoot, 'app', 'index.html')), true);
     assert.equal(fs.existsSync(path.join(tempRoot, 'app', 'public', 'index.html')), true);
     assert.equal(fs.existsSync(path.join(tempRoot, 'docs', 'PRIVACY.md')), true);
     assert.equal(fs.existsSync(path.join(tempRoot, 'docs', 'SUPPORT.md')), true);
     assert.equal(fs.existsSync(path.join(tempRoot, 'app-listing.template.json')), true);
+
+    const rootIndex = fs.readFileSync(path.join(tempRoot, 'app', 'index.html'), 'utf8');
+    assert.match(rootIndex, /url=\.\/public\/index\.html/);
 
     const listingTemplate = JSON.parse(fs.readFileSync(path.join(tempRoot, 'app-listing.template.json'), 'utf8'));
     assert.equal(listingTemplate.version, '9.9.9');
@@ -54,5 +65,6 @@ test('buildPublishBundle creates app, docs, metadata, and rasterized marketplace
     });
   } finally {
     fs.rmSync(tempRoot, { recursive: true, force: true });
+    fs.rmSync(buildTempRoot, { recursive: true, force: true });
   }
 });

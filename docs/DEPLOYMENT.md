@@ -44,6 +44,14 @@ After hosting the repo, configure these URLs in your Ecwid app settings:
 |---------|-------|
 | App page URL | `https://your-host/public/index.html` |
 
+For this repository on GitHub Pages, the default app page URL is:
+
+- `https://devlinduldulao.github.io/ecwid-theme-performance-pulse/public/index.html`
+
+The repository root URL also redirects to the dashboard landing page:
+
+- `https://devlinduldulao.github.io/ecwid-theme-performance-pulse/`
+
 Optional helper assets can still point at:
 
 - `https://your-host/src/storefront/custom-storefront.js`
@@ -82,6 +90,13 @@ Safe current state:
 - `ci.yml`: no Ecwid secrets required
 - `deploy-pages.yml`: no Ecwid secrets required beyond GitHub Pages permissions
 - `release.yml`: no Ecwid secrets required
+
+To activate GitHub Pages for this workflow in the repository settings:
+
+1. Open GitHub repository settings.
+2. Go to Pages.
+3. Set Source to `GitHub Actions`.
+4. Push to `main` or run `Deploy Pages` manually from the Actions tab.
 
 Only add GitHub Actions Secrets if you later introduce server-side behavior such as OAuth token exchange, private REST calls, or automated Ecwid admin mutations from CI.
 
