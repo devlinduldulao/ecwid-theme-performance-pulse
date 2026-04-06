@@ -1,6 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { buildStaticArtifacts } = require('./build');
 
 const projectRoot = path.resolve(__dirname, '..');
 const mimeTypes = {
@@ -189,7 +190,7 @@ async function run() {
     });
 
     await test('Build script emits dist artifacts', async () => {
-      require('./build');
+      buildStaticArtifacts();
 
       if (!fs.existsSync(path.join(projectRoot, 'dist', 'public', 'index.html'))) {
         throw new Error('build script did not create dist/public/index.html');
