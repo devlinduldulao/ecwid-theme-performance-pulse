@@ -25,6 +25,29 @@ This repo is now prepared for a static Ecwid app submission, but a few store-spe
 
 You can keep these values in `app-listing.config.json` so `npm run publish:bundle` injects them into the generated listing metadata automatically.
 
+## Ecwid market request and app review inputs
+
+For Ecwid's market request form and app review workflow, these values are typically safe to provide:
+
+- app name
+- company website
+- app category and purpose
+- app description and merchant benefit
+- expected install range
+- client ID
+- requested access scopes
+- hosted app page URL
+- hosted privacy policy URL
+- hosted support URL
+
+Do not paste these into a general intake form unless Ecwid explicitly asks for them through a secure review step:
+
+- client secret
+- secret token
+- private single-store token
+
+The current app is a static owner dashboard. Its packaging and marketplace submission do not depend on those secret values being stored in this repo.
+
 ## Suggested submission package
 
 ### App identity
@@ -64,6 +87,14 @@ Run the local app, refresh the marketplace screenshots when the UI changes, then
 - Ecwid app page URL points to the hosted owner dashboard
 - app storage read/write works in a real Ecwid admin session
 - optional PageSpeed API key is never stored in Ecwid app storage
+
+## Safe submission checklist
+
+- [ ] Client ID is recorded in your Ecwid app setup
+- [ ] Requested scopes match the actual app behavior
+- [ ] No client secret or secret token is committed to the repo
+- [ ] No secret values appear in screenshots, publish assets, or app listing files
+- [ ] Hosted URLs in the Ecwid submission are production HTTPS URLs
 
 ## Required policy/support surfaces
 

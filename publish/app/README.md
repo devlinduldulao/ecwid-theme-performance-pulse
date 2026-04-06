@@ -130,6 +130,28 @@ Optional storefront helper URLs can still point at:
 
 If you are not using a custom app yet, you can still host the dashboard as a standalone page for testing before wiring it into Ecwid.
 
+## Credentials and secrets
+
+This repo's current build, test, packaging, GitHub Pages deploy, and GitHub Release workflows do not require Ecwid secrets.
+
+Safe to use in app registration docs or marketplace setup:
+
+- Ecwid client ID
+- requested access scopes
+- hosted app page URL
+- hosted privacy policy URL
+- hosted support URL
+
+Do not commit or expose in browser code:
+
+- Ecwid client secret
+- secret token
+- any private single-store token
+
+The optional public token is also not required by the current static owner-dashboard flow. Only introduce it if you later add a storefront API feature that genuinely needs it.
+
+If you later add server-side OAuth or private Ecwid API automation, store those secrets in GitHub Actions Secrets or your deployment platform's secret store rather than tracked files.
+
 ## When you would still need a backend
 
 Add a real backend only if you need one of these:
