@@ -67,12 +67,16 @@ async function run() {
       }
     });
 
-    await test('Root page redirects visitors to the dashboard', async () => {
+    await test('Root page bootstraps the dashboard without redirecting', async () => {
       const response = await fetch(`${baseUrl}/`);
       const body = await response.text();
 
-      if (response.status !== 200 || !body.includes('./public/index.html')) {
-        throw new Error('root page did not serve the dashboard redirect');
+      if (response.status !== 200 || !body.includes('Loading the owner dashboard without leaving this URL.')) {
+        throw new Error('root page did not serve the dashboard bootstrap shell');
+      }
+
+      if (body.includes('window.location.replace') || body.includes('http-equiv="refresh"')) {
+        throw new Error('root page still contains redirect behavior');
       }
     });
 

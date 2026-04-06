@@ -6,7 +6,7 @@ const path = require('path');
 
 const { buildStaticArtifacts } = require('../scripts/build');
 
-test('buildStaticArtifacts writes a root redirect for GitHub Pages', () => {
+test('buildStaticArtifacts writes a root dashboard bootstrap for GitHub Pages', () => {
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'tpp-build-'));
   const distRoot = path.join(tempRoot, 'dist');
   const projectRoot = path.resolve(__dirname, '..');
@@ -19,7 +19,8 @@ test('buildStaticArtifacts writes a root redirect for GitHub Pages', () => {
     const rootIndex = fs.readFileSync(rootIndexPath, 'utf8');
 
     assert.equal(rootIndex, sourceRootIndex);
-    assert.match(rootIndex, /window\.location\.replace/);
+    assert.match(rootIndex, /bootstrapRootDashboard/);
+    assert.doesNotMatch(rootIndex, /window\.location\.replace/);
     assert.match(rootIndex, /\.\/public\/index\.html/);
   } finally {
     fs.rmSync(tempRoot, { recursive: true, force: true });

@@ -4,22 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Theme Performance Pulse for Ecwid</title>
-  <meta http-equiv="refresh" content="0; url=./public/index.html">
   <script>
-    const targetUrl = new URL('./public/index.html', window.location.href);
+    async function bootstrapRootDashboard() {
+      const sourceUrl = new URL('./public/index.html', window.location.href);
 
-    if (window.location.search) {
-      targetUrl.search = window.location.search;
+      try {
+        const response = await fetch(sourceUrl.toString(), { credentials: 'same-origin' });
+
+        if (!response.ok) {
+          throw new Error(`Unable to load dashboard shell (${response.status})`);
+        }
+
+        const sourceHtml = await response.text();
+        const parsedDocument = new DOMParser().parseFromString(sourceHtml, 'text/html');
+
+        document.title = parsedDocument.title || document.title;
+
+        parsedDocument.querySelectorAll('link[rel="stylesheet"], style').forEach((node) => {
+          document.head.appendChild(node.cloneNode(true));
+        });
+
+        document.body.innerHTML = parsedDocument.body.innerHTML;
+
+        document.body.querySelectorAll('[href], [src]').forEach((element) => {
+          ['href', 'src'].forEach((attributeName) => {
+            const value = element.getAttribute(attributeName);
+
+            if (!value || /^(?:[a-z]+:|\/\/|#)/i.test(value)) {
+              return;
+            }
+
+            element.setAttribute(attributeName, new URL(value, sourceUrl).toString());
+          });
+        });
+
+        const scripts = Array.from(document.body.querySelectorAll('script'));
+        scripts.forEach((script) => script.remove());
+
+        for (const script of scripts) {
+          const nextScript = document.createElement('script');
+
+          Array.from(script.attributes).forEach((attribute) => {
+            if (attribute.name === 'src') {
+              nextScript.src = new URL(attribute.value, sourceUrl).toString();
+              return;
+            }
+
+            nextScript.setAttribute(attribute.name, attribute.value);
+          });
+
+          if (!script.src) {
+            nextScript.textContent = script.textContent;
+          }
+
+          document.body.appendChild(nextScript);
+        }
+      } catch (error) {
+        const status = document.querySelector('[data-tpp-root-status]');
+
+        if (status) {
+          status.textContent = 'Unable to load the embedded dashboard shell. Open the direct dashboard link below.';
+        }
+
+        console.error(error);
+      }
     }
 
-    if (window.location.hash) {
-      targetUrl.hash = window.location.hash;
-    }
-
-    window.location.replace(targetUrl.toString());
+    window.addEventListener('DOMContentLoaded', () => {
+      void bootstrapRootDashboard();
+    });
   </script>
 </head>
 <body>
-  <p>Redirecting to <a href="./public/index.html">Theme Performance Pulse for Ecwid</a>...</p>
+  <main>
+    <h1>Theme Performance Pulse for Ecwid</h1>
+    <p data-tpp-root-status>Loading the owner dashboard without leaving this URL.</p>
+    <p><a href="./public/index.html">Open the direct dashboard path</a></p>
+  </main>
+  <noscript>
+    <p>JavaScript is required to load the owner dashboard at this root URL.</p>
+  </noscript>
 </body>
 </html>
