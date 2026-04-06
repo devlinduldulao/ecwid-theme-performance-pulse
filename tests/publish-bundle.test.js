@@ -46,6 +46,7 @@ test('buildPublishBundle creates app, docs, metadata, and rasterized marketplace
 
     const rootIndex = fs.readFileSync(path.join(tempRoot, 'app', 'index.html'), 'utf8');
     assert.match(rootIndex, /url=\.\/public\/index\.html/);
+  assert.match(rootIndex, /window\.location\.replace/);
 
     const listingTemplate = JSON.parse(fs.readFileSync(path.join(tempRoot, 'app-listing.template.json'), 'utf8'));
     assert.equal(listingTemplate.version, '9.9.9');

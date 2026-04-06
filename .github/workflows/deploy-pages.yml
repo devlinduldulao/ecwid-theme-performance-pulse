@@ -1,4 +1,4 @@
-name: Deploy Pages
+name: Deploy GitHub Pages
 
 on:
   push:
@@ -13,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: github-pages
   cancel-in-progress: true
 
 jobs:
@@ -22,13 +22,16 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
 
       - name: Install dependencies
         run: npm ci
@@ -42,13 +45,10 @@ jobs:
       - name: Build static app
         run: npm run build
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
-          path: ./dist
+          path: dist
 
   deploy:
     needs: build

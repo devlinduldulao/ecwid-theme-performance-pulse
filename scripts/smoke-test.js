@@ -12,7 +12,8 @@ const mimeTypes = {
 };
 
 function serveFile(req, res) {
-  const requestPath = req.url === '/' ? '/public/index.html' : req.url;
+  const rootIndexPath = path.join(projectRoot, 'index.html');
+  const requestPath = req.url === '/' && fs.existsSync(rootIndexPath) ? '/index.html' : req.url;
   const targetPath = path.join(projectRoot, decodeURIComponent(requestPath));
 
   if (!targetPath.startsWith(projectRoot)) {
@@ -62,6 +63,15 @@ async function run() {
 
       if (response.status !== 200 || !body.includes('Ecwid Owner Dashboard')) {
         throw new Error('admin page did not load expected content');
+      }
+    });
+
+    await test('Root page redirects visitors to the dashboard', async () => {
+      const response = await fetch(`${baseUrl}/`);
+      const body = await response.text();
+
+      if (response.status !== 200 || !body.includes('./public/index.html')) {
+        throw new Error('root page did not serve the dashboard redirect');
       }
     });
 
@@ -160,6 +170,10 @@ async function run() {
 
       if (!fs.existsSync(path.join(projectRoot, 'dist', 'README.md'))) {
         throw new Error('build script did not copy README.md into dist');
+      }
+
+      if (!fs.existsSync(path.join(projectRoot, 'dist', 'index.html'))) {
+        throw new Error('build script did not copy root index.html into dist');
       }
     });
 

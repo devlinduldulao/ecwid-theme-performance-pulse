@@ -4,34 +4,7 @@ const path = require('path');
 const projectRoot = path.resolve(__dirname, '..');
 const defaultDistRoot = path.join(projectRoot, 'dist');
 const directoriesToCopy = ['public', 'src'];
-const filesToCopy = ['README.md', '_headers'];
-
-const pagesRedirectHtml = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Theme Performance Pulse for Ecwid</title>
-  <meta http-equiv="refresh" content="0; url=./public/index.html">
-  <script>
-    const targetUrl = new URL('./public/index.html', window.location.href);
-
-    if (window.location.search) {
-      targetUrl.search = window.location.search;
-    }
-
-    if (window.location.hash) {
-      targetUrl.hash = window.location.hash;
-    }
-
-    window.location.replace(targetUrl.toString());
-  </script>
-</head>
-<body>
-  <p>Redirecting to <a href="./public/index.html">Theme Performance Pulse for Ecwid</a>...</p>
-</body>
-</html>
-`;
+const filesToCopy = ['README.md', '_headers', 'index.html'];
 
 function removeDirectory(targetPath) {
   fs.rmSync(targetPath, { recursive: true, force: true });
@@ -71,8 +44,6 @@ function buildStaticArtifacts(options = {}) {
     fs.copyFileSync(path.join(projectRoot, fileName), path.join(outputRoot, fileName));
   });
 
-  fs.writeFileSync(path.join(outputRoot, 'index.html'), pagesRedirectHtml);
-
   return outputRoot;
 }
 
@@ -84,5 +55,4 @@ if (require.main === module) {
 module.exports = {
   buildStaticArtifacts,
   defaultDistRoot,
-  pagesRedirectHtml,
 };

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Performance Pulse for Ecwid</title>
+  <meta http-equiv="refresh" content="0; url=./public/index.html">
+  <script>
+    const targetUrl = new URL('./public/index.html', window.location.href);
+
+    if (window.location.search) {
+      targetUrl.search = window.location.search;
+    }
+
+    if (window.location.hash) {
+      targetUrl.hash = window.location.hash;
+    }
+
+    window.location.replace(targetUrl.toString());
+  </script>
+</head>
+<body>
+  <p>Redirecting to <a href="./public/index.html">Theme Performance Pulse for Ecwid</a>...</p>
+</body>
+</html>
