@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 20
           cache: npm
@@ -39,7 +39,7 @@ jobs:
           zip -r release-artifacts/theme-performance-pulse-ecwid-dist-${GITHUB_REF_NAME:-manual}.zip dist
 
       - name: Upload workflow artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: theme-performance-pulse-ecwid-release-artifacts
           path: release-artifacts/
