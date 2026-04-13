@@ -425,6 +425,222 @@
       word-break: break-all;
     }
 
+    /* ── Preview Mode Global Banner ── */
+    .tpp-preview-banner {
+      display: none;
+      background: #FEF3CD;
+      border: 2px solid #F0AD4E;
+      border-radius: 8px;
+      padding: 16px 24px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: #856404;
+      line-height: 1.5;
+      animation: tpp-pulse-border 2s ease-in-out infinite;
+    }
+
+    .tpp-preview-banner.is-visible {
+      display: block;
+    }
+
+    .tpp-preview-banner__icon {
+      font-size: 18px;
+      margin-right: 8px;
+    }
+
+    .tpp-preview-banner__dismiss {
+      display: inline-block;
+      margin-left: 12px;
+      padding: 4px 14px;
+      background: #856404;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tpp-preview-banner__dismiss:hover {
+      background: #6d5303;
+    }
+
+    @keyframes tpp-pulse-border {
+      0%, 100% { border-color: #F0AD4E; }
+      50% { border-color: #d4930a; }
+    }
+
+    /* ── Live Data Indicator ── */
+    .tpp-live-banner {
+      display: none;
+      background: #D4EDDA;
+      border: 2px solid #28A745;
+      border-radius: 8px;
+      padding: 16px 24px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: #155724;
+      line-height: 1.5;
+    }
+
+    .tpp-live-banner.is-visible {
+      display: block;
+    }
+
+    /* ── Quick Start Guide ── */
+    .tpp-guide-steps {
+      display: grid;
+      gap: 16px;
+      counter-reset: guide-step;
+    }
+
+    .tpp-guide-step {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 14px 16px;
+      background: var(--ls-gray-light);
+      border-radius: 6px;
+      border: 1px solid var(--tpp-border);
+      counter-increment: guide-step;
+    }
+
+    .tpp-guide-step__number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--tpp-ink);
+      color: var(--ls-white);
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .tpp-guide-step.is-done .tpp-guide-step__number {
+      background: #28A745;
+    }
+
+    .tpp-guide-step__content strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .tpp-guide-step__content p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--tpp-muted);
+      line-height: 1.4;
+    }
+
+    /* ── Improved Empty State ── */
+    .tpp-empty-state {
+      padding: 48px 40px;
+      text-align: center;
+      background: var(--ls-gray-light);
+      border: 2px dashed var(--tpp-border);
+      border-radius: 8px;
+      color: var(--tpp-muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .tpp-empty-state__icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .tpp-empty-state__title {
+      display: block;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--tpp-ink);
+      margin-bottom: 8px;
+    }
+
+    .tpp-empty-state__steps {
+      display: inline-grid;
+      text-align: left;
+      gap: 8px;
+      margin-top: 16px;
+      font-size: 13px;
+    }
+
+    .tpp-empty-state__steps span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tpp-empty-state__steps .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--tpp-ink);
+      color: var(--ls-white);
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ── Data Source Badges on Cards ── */
+    .tpp-data-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .tpp-data-badge--live {
+      background: #D4EDDA;
+      color: #155724;
+      border: 1px solid #28A745;
+    }
+
+    .tpp-data-badge--sample {
+      background: #FEF3CD;
+      color: #856404;
+      border: 1px solid #F0AD4E;
+    }
+
+    /* ── Preview mode card overlay styling ── */
+    .tpp-audit-card.is-sample {
+      border: 2px dashed #F0AD4E;
+      position: relative;
+    }
+
+    .tpp-audit-card.is-sample::before {
+      content: "SAMPLE";
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 2px 8px;
+      background: #FEF3CD;
+      color: #856404;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      border-radius: 3px;
+      border: 1px solid #F0AD4E;
+      z-index: 1;
+    }
+
     /* Status Animations */
     .is-loading {
       opacity: 0.6;
@@ -434,10 +650,21 @@
 </head>
 <body>
   <main class="tpp-shell">
+    <!-- Preview Mode Banner — full-width, impossible to miss -->
+    <div id="tpp-preview-banner" class="tpp-preview-banner" role="alert">
+      <span class="tpp-preview-banner__icon" aria-hidden="true">&#9888;</span>
+      You are viewing <strong>sample data</strong> — these numbers are not from your store. Click <strong>Run Audit</strong> to see your real metrics, or <button id="exit-preview-banner-btn" class="tpp-preview-banner__dismiss" type="button">Exit Preview</button>
+    </div>
+
+    <!-- Live Data Banner — confirms real data -->
+    <div id="tpp-live-banner" class="tpp-live-banner" role="status">
+      &#10003; Showing <strong>live PageSpeed data</strong> from your actual storefront. These are real metrics from Google.
+    </div>
+
     <section class="tpp-hero">
       <p class="tpp-kicker">Ecwid Owner Dashboard</p>
       <h1>Theme Performance Pulse</h1>
-      <p>Give Ecwid business owners a dashboard they can actually use inside admin: save storefront audit targets, run on-demand PageSpeed checks, and review the highest-signal performance issues without paying for a database, Redis, or a hosted Node.js collector.</p>
+      <p>Measure your Ecwid storefront speed with real Google PageSpeed data — right from your admin panel. No backend, no subscriptions, no cost.</p>
       <div class="tpp-status-strip">
         <div class="tpp-badge" id="connection-mode">Standalone owner preview</div>
         <div class="tpp-meta">Store: <strong id="store-id">Not connected to an Ecwid store</strong></div>
@@ -459,6 +686,7 @@
             <div class="tpp-field">
               <label for="storefront-base-url">Storefront Base URL</label>
               <input id="storefront-base-url" type="url" placeholder="https://your-store.example.com/">
+              <div class="tpp-help-text">The public URL of your Ecwid-powered storefront.</div>
             </div>
             <div class="tpp-field">
               <label for="audit-strategy">Audit Strategy</label>
@@ -466,6 +694,7 @@
                 <option value="mobile">Mobile</option>
                 <option value="desktop">Desktop</option>
               </select>
+              <div class="tpp-help-text">Mobile is recommended — Google uses mobile-first indexing.</div>
             </div>
             <div class="tpp-field tpp-field--full">
               <label for="audit-targets">Audit Targets</label>
@@ -475,6 +704,7 @@
             <div class="tpp-field tpp-field--full">
               <label for="psi-api-key">Optional PageSpeed API Key</label>
               <input id="psi-api-key" type="password" placeholder="Optional. Stays only in this browser and is never saved to Ecwid app storage.">
+              <div class="tpp-help-text">Without a key audits still work but may be rate-limited by Google. <a href="https://developers.google.com/speed/docs/insights/v5/get-started" target="_blank" rel="noopener">Get a free API key</a>.</div>
             </div>
           </div>
 
@@ -489,17 +719,44 @@
 
       <section class="tpp-card">
         <div class="tpp-card__header">
-          <h2>Deployment Notes</h2>
-          <p>This package stays static-first. The owner dashboard lives in Ecwid admin, while audits run directly from the browser against PageSpeed Insights.</p>
+          <h2>Quick Start Guide</h2>
+          <p>Follow these steps to see your real storefront performance data.</p>
         </div>
         <div class="tpp-card__body">
+          <div class="tpp-guide-steps">
+            <div class="tpp-guide-step" id="guide-step-1">
+              <div class="tpp-guide-step__number">1</div>
+              <div class="tpp-guide-step__content">
+                <strong>Enter your storefront URL</strong>
+                <p>Paste the public URL of your Ecwid-powered store (e.g. https://my-store.com).</p>
+              </div>
+            </div>
+            <div class="tpp-guide-step" id="guide-step-2">
+              <div class="tpp-guide-step__number">2</div>
+              <div class="tpp-guide-step__content">
+                <strong>Add audit targets</strong>
+                <p>List the pages you want to measure — homepage, product pages, cart, etc. One per line as "Label | /path".</p>
+              </div>
+            </div>
+            <div class="tpp-guide-step" id="guide-step-3">
+              <div class="tpp-guide-step__number">3</div>
+              <div class="tpp-guide-step__content">
+                <strong>Click "Save Settings" then "Run Audit"</strong>
+                <p>The app calls Google PageSpeed Insights and shows your real scores below — performance, accessibility, SEO, and specific improvement opportunities.</p>
+              </div>
+            </div>
+          </div>
+          <div class="tpp-note" style="margin-top: 16px;">
+            <strong>What about "Preview Demo"?</strong>
+            <p>The Preview Demo button shows sample data so you can explore the dashboard layout. It is <em>not</em> real data from your store. A yellow banner will always appear when preview mode is active. Run Audit to get your actual metrics.</p>
+          </div>
           <div class="tpp-note">
-            <strong>No hosted backend required</strong>
-            <p>The merchant can save audit targets and run audits from the Ecwid dashboard. Any optional PageSpeed API key stays local to the merchant browser and is not written into Ecwid app storage.</p>
+            <strong>No paid services required</strong>
+            <p>Audits run directly from your browser to Google PageSpeed Insights — completely free. Your API key (if provided) never leaves this browser. No backend server or database is involved.</p>
           </div>
           <div class="tpp-code-card">
             <strong>Optional storefront asset URL</strong>
-            <p>This remains available only if you later decide to ship storefront helpers, but the core product is now the owner dashboard.</p>
+            <p>Available only if you later ship storefront helpers through the Ecwid app config.</p>
             <code id="asset-js-url"></code>
           </div>
         </div>
@@ -509,7 +766,7 @@
     <section class="tpp-card">
       <div class="tpp-card__header">
         <h2>Audit Results</h2>
-        <p>Run targeted checks against the URLs that matter to the business owner: home, category, product, cart, or any revenue-critical landing page.</p>
+        <p>Real performance data from Google PageSpeed Insights for the storefront URLs you configured above.</p>
       </div>
       <div class="tpp-card__body">
         <div class="tpp-summary-grid">
@@ -540,7 +797,16 @@
           <div id="preview-mode-badge" class="tpp-meta">Live audit results</div>
         </div>
 
-        <div id="tpp-empty-results" class="tpp-empty-state">No audits have been run yet. Save a storefront base URL and one or more targets, then run the audit from this dashboard.</div>
+        <div id="tpp-empty-results" class="tpp-empty-state">
+          <div class="tpp-empty-state__icon" aria-hidden="true">&#9889;</div>
+          <span class="tpp-empty-state__title">No audit results yet</span>
+          Get your real storefront performance data in three quick steps:
+          <div class="tpp-empty-state__steps">
+            <span><span class="step-num">1</span> Enter your storefront URL in Owner Settings</span>
+            <span><span class="step-num">2</span> Add at least one audit target (e.g. Homepage | /)</span>
+            <span><span class="step-num">3</span> Click Save Settings, then Run Audit</span>
+          </div>
+        </div>
         <div id="tpp-audit-results" class="tpp-audit-results"></div>
       </div>
     </section>

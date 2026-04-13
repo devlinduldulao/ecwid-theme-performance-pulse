@@ -30,9 +30,15 @@
     connectionMode: document.getElementById('connection-mode'),
     dashboardHint: document.getElementById('dashboard-hint'),
     emptyResults: document.getElementById('tpp-empty-results'),
+    exitPreviewBannerBtn: document.getElementById('exit-preview-banner-btn'),
+    guideStep1: document.getElementById('guide-step-1'),
+    guideStep2: document.getElementById('guide-step-2'),
+    guideStep3: document.getElementById('guide-step-3'),
     jsUrl: document.getElementById('asset-js-url'),
     lastRun: document.getElementById('last-run-at'),
+    liveBanner: document.getElementById('tpp-live-banner'),
     previewBadge: document.getElementById('preview-mode-badge'),
+    previewBanner: document.getElementById('tpp-preview-banner'),
     previewButton: document.getElementById('preview-toggle-btn'),
     results: document.getElementById('tpp-audit-results'),
     runButton: document.getElementById('run-audit-btn'),
@@ -103,8 +109,18 @@
     els.previewButton.setAttribute('aria-pressed', state.previewMode ? 'true' : 'false');
     els.previewButton.classList.toggle('btn-primary', state.previewMode);
     els.previewButton.classList.toggle('btn-default', !state.previewMode);
-    els.previewBadge.textContent = state.previewMode ? 'Sample data enabled' : 'Live audit results';
+    els.previewBadge.textContent = state.previewMode ? 'Sample data — not from your store' : 'Live audit results';
     els.previewBadge.className = state.previewMode ? 'tpp-meta is-preview' : 'tpp-meta';
+
+    if (els.previewBanner) {
+      els.previewBanner.classList.toggle('is-visible', state.previewMode);
+    }
+
+    var hasLiveResults = !state.previewMode && state.results.length > 0;
+
+    if (els.liveBanner) {
+      els.liveBanner.classList.toggle('is-visible', hasLiveResults);
+    }
   }
 
   function setPreviewMode(enabled) {
@@ -204,8 +220,27 @@
     return '<div class="tpp-metric-cell"><span>' + escapeHtml(label) + '</span><strong>' + escapeHtml(value) + '</strong></div>';
   }
 
+  function updateGuideSteps() {
+    var hasUrl = els.storefrontBaseUrl && els.storefrontBaseUrl.value.trim();
+    var hasTargets = els.auditTargets && els.auditTargets.value.trim();
+    var hasResults = state.results.length > 0;
+
+    if (els.guideStep1) {
+      els.guideStep1.classList.toggle('is-done', Boolean(hasUrl));
+    }
+
+    if (els.guideStep2) {
+      els.guideStep2.classList.toggle('is-done', Boolean(hasTargets));
+    }
+
+    if (els.guideStep3) {
+      els.guideStep3.classList.toggle('is-done', hasResults);
+    }
+  }
+
   function renderResults(results) {
     renderSummary(results);
+    updateGuideSteps();
 
     if (!results.length) {
       els.emptyResults.hidden = false;
@@ -217,10 +252,17 @@
     els.emptyResults.hidden = true;
     els.results.innerHTML = results
       .map(function (result) {
+        var isPreview = Boolean(result.isPreview);
+        var badgeHtml = isPreview
+          ? '<span class="tpp-data-badge tpp-data-badge--sample">Sample Data</span>'
+          : '<span class="tpp-data-badge tpp-data-badge--live">Live Data</span>';
+        var cardClass = 'tpp-audit-card is-' + dashboardCore.scoreTone(result.scores.performance) + (isPreview ? ' is-sample' : '');
+        var eyebrowSuffix = isPreview ? ' &middot; NOT real data' : ' &middot; from Google PageSpeed';
+
         return [
-          '<article class="tpp-audit-card is-' + dashboardCore.scoreTone(result.scores.performance) + '">',
+          '<article class="' + cardClass + '">',
           '<header class="tpp-audit-card__header">',
-            '<div><p class="tpp-audit-card__eyebrow">' + escapeHtml(result.strategy) + ' audit' + (result.isPreview ? ' • preview sample' : '') + '</p><h3>' + escapeHtml(result.label) + '</h3><p class="tpp-audit-card__url">' + escapeHtml(result.url) + '</p></div>',
+            '<div>' + badgeHtml + '<p class="tpp-audit-card__eyebrow">' + escapeHtml(result.strategy) + ' audit' + eyebrowSuffix + '</p><h3>' + escapeHtml(result.label) + '</h3><p class="tpp-audit-card__url">' + escapeHtml(result.url) + '</p></div>',
           '<div class="tpp-score-pill is-' + dashboardCore.scoreTone(result.scores.performance) + '">' + escapeHtml(result.scores.performance === null ? 'n/a' : result.scores.performance) + '</div>',
           '</header>',
           '<div class="tpp-score-grid">',
@@ -429,6 +471,18 @@
       showStatus(error.message || 'Audit run failed.', 'error');
     });
   });
+
+  if (els.exitPreviewBannerBtn) {
+    els.exitPreviewBannerBtn.addEventListener('click', function () {
+      setPreviewMode(false);
+      showStatus(
+        state.results.length
+          ? 'Preview mode disabled. Showing the latest live audit results saved in this browser.'
+          : 'Preview mode disabled. Run a live audit when you want real PageSpeed data.',
+        'success'
+      );
+    });
+  }
 
   bootstrapEcwid();
 })();

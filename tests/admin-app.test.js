@@ -88,7 +88,7 @@ test('standalone bootstrap restores preview mode from local storage', async () =
   });
 
   assert.equal(app.document.getElementById('preview-toggle-btn').textContent, 'Exit Preview');
-  assert.equal(app.document.getElementById('preview-mode-badge').textContent, 'Sample data enabled');
+  assert.equal(app.document.getElementById('preview-mode-badge').textContent, 'Sample data — not from your store');
   assert.match(app.document.getElementById('tpp-audit-results').textContent, /Homepage/);
   assert.equal(app.document.getElementById('status-message').textContent, '');
   app.dom.window.close();
@@ -363,5 +363,199 @@ test('save settings in ecwid mode falls back gracefully when app storage write f
   assert.equal(app.fetchCalls[1].init.method, 'POST');
   assert.match(app.document.getElementById('status-message').textContent, /Saved locally, but Ecwid app storage update failed/i);
   assert.match(app.window.localStorage.getItem('theme-performance-pulse:ecwid:dashboard-config'), /merchant\.example/);
+  app.dom.window.close();
+});
+
+test('preview mode shows preview banner and hides live banner', async () => {
+  const app = await bootApp({
+    beforeScripts(window) {
+      window.localStorage.setItem(
+        'theme-performance-pulse:ecwid:dashboard-config',
+        JSON.stringify({
+          storefrontBaseUrl: 'https://merchant.example/',
+          auditTargets: 'Homepage | /',
+        })
+      );
+      window.localStorage.setItem('theme-performance-pulse:ecwid:preview-mode', 'true');
+    },
+  });
+
+  const previewBanner = app.document.getElementById('tpp-preview-banner');
+  const liveBanner = app.document.getElementById('tpp-live-banner');
+
+  assert.ok(previewBanner.classList.contains('is-visible'), 'Preview banner should be visible in preview mode');
+  assert.ok(!liveBanner.classList.contains('is-visible'), 'Live banner should be hidden in preview mode');
+  app.dom.window.close();
+});
+
+test('live results show live banner and hide preview banner', async () => {
+  const app = await bootApp({
+    beforeScripts(window) {
+      window.localStorage.setItem(
+        'theme-performance-pulse:ecwid:dashboard-config',
+        JSON.stringify({
+          storefrontBaseUrl: 'https://merchant.example/',
+          auditTargets: 'Homepage | /',
+        })
+      );
+      window.localStorage.setItem(
+        'theme-performance-pulse:ecwid:last-results',
+        JSON.stringify([
+          {
+            label: 'Homepage',
+            strategy: 'mobile',
+            url: 'https://merchant.example/',
+            fetchedAt: new Date().toISOString(),
+            scores: { performance: 85, accessibility: 90, bestPractices: 88, seo: 92 },
+            metrics: { lcp: '2000 ms', cls: '0.050', inp: '150 ms', tbt: '100 ms' },
+            opportunities: [],
+            headline: 'No high-signal issues detected',
+          },
+        ])
+      );
+    },
+  });
+
+  const previewBanner = app.document.getElementById('tpp-preview-banner');
+  const liveBanner = app.document.getElementById('tpp-live-banner');
+
+  assert.ok(!previewBanner.classList.contains('is-visible'), 'Preview banner should be hidden for live data');
+  assert.ok(liveBanner.classList.contains('is-visible'), 'Live banner should be visible for live results');
+  app.dom.window.close();
+});
+
+test('preview mode audit cards carry sample data badge and is-sample class', async () => {
+  const app = await bootApp({
+    beforeScripts(window) {
+      window.localStorage.setItem(
+        'theme-performance-pulse:ecwid:dashboard-config',
+        JSON.stringify({
+          storefrontBaseUrl: 'https://merchant.example/',
+          auditTargets: 'Homepage | /',
+        })
+      );
+      window.localStorage.setItem('theme-performance-pulse:ecwid:preview-mode', 'true');
+    },
+  });
+
+  const resultsHtml = app.document.getElementById('tpp-audit-results').innerHTML;
+
+  assert.match(resultsHtml, /tpp-data-badge--sample/, 'Preview cards should have sample badge');
+  assert.match(resultsHtml, /is-sample/, 'Preview cards should have is-sample class');
+  assert.match(resultsHtml, /NOT real data/, 'Preview cards should state NOT real data');
+  app.dom.window.close();
+});
+
+test('live audit cards carry live data badge without is-sample class', async () => {
+  const app = await bootApp({
+    fetchQueue: [
+      createResponse(200, {
+        lighthouseResult: {
+          categories: {
+            performance: { score: 0.88 },
+            accessibility: { score: 0.9 },
+            'best-practices': { score: 0.85 },
+            seo: { score: 0.93 },
+          },
+          audits: {
+            'largest-contentful-paint': { numericValue: 2050 },
+            'cumulative-layout-shift': { numericValue: 0.08 },
+            'interaction-to-next-paint': { numericValue: 180 },
+            'total-blocking-time': { numericValue: 120 },
+          },
+        },
+      }),
+    ],
+  });
+
+  app.document.getElementById('storefront-base-url').value = 'https://merchant.example/';
+  app.document.getElementById('audit-targets').value = 'Homepage | /';
+  app.document.getElementById('run-audit-btn').click();
+  await flush(app.window, 8);
+
+  const resultsHtml = app.document.getElementById('tpp-audit-results').innerHTML;
+
+  assert.match(resultsHtml, /tpp-data-badge--live/, 'Live cards should have live badge');
+  assert.match(resultsHtml, /from Google PageSpeed/, 'Live cards should state from Google PageSpeed');
+  assert.ok(!resultsHtml.includes('is-sample'), 'Live cards should not have is-sample class');
+  app.dom.window.close();
+});
+
+test('exit preview banner button exits preview mode', async () => {
+  const app = await bootApp({
+    beforeScripts(window) {
+      window.localStorage.setItem(
+        'theme-performance-pulse:ecwid:dashboard-config',
+        JSON.stringify({
+          storefrontBaseUrl: 'https://merchant.example/',
+          auditTargets: 'Homepage | /',
+        })
+      );
+      window.localStorage.setItem('theme-performance-pulse:ecwid:preview-mode', 'true');
+    },
+  });
+
+  assert.ok(app.document.getElementById('tpp-preview-banner').classList.contains('is-visible'));
+  app.document.getElementById('exit-preview-banner-btn').click();
+  await flush(app.window);
+
+  assert.ok(!app.document.getElementById('tpp-preview-banner').classList.contains('is-visible'), 'Preview banner should hide after exit');
+  assert.equal(app.document.getElementById('preview-toggle-btn').textContent, 'Preview Demo');
+  assert.match(app.document.getElementById('status-message').textContent, /Preview mode disabled/i);
+  app.dom.window.close();
+});
+
+test('quick start guide is present in the dashboard', async () => {
+  const app = await bootApp();
+
+  assert.ok(app.document.getElementById('guide-step-1'), 'Guide step 1 should exist');
+  assert.ok(app.document.getElementById('guide-step-2'), 'Guide step 2 should exist');
+  assert.ok(app.document.getElementById('guide-step-3'), 'Guide step 3 should exist');
+  assert.match(app.document.querySelector('#guide-step-1 .tpp-guide-step__content strong').textContent, /storefront URL/i);
+  app.dom.window.close();
+});
+
+test('empty state shows step-by-step instructions', async () => {
+  const app = await bootApp();
+
+  const emptyState = app.document.getElementById('tpp-empty-results');
+
+  assert.ok(!emptyState.hidden, 'Empty state should be visible when no results');
+  assert.match(emptyState.textContent, /No audit results yet/i);
+  assert.match(emptyState.textContent, /Enter your storefront URL/i);
+  assert.match(emptyState.textContent, /Run Audit/i);
+  app.dom.window.close();
+});
+
+test('guide steps mark as done when fields are populated and audit runs', async () => {
+  const app = await bootApp({
+    fetchQueue: [
+      createResponse(200, {
+        lighthouseResult: {
+          categories: {
+            performance: { score: 0.88 },
+            accessibility: { score: 0.9 },
+            'best-practices': { score: 0.85 },
+            seo: { score: 0.93 },
+          },
+          audits: {
+            'largest-contentful-paint': { numericValue: 2050 },
+            'cumulative-layout-shift': { numericValue: 0.08 },
+            'interaction-to-next-paint': { numericValue: 180 },
+            'total-blocking-time': { numericValue: 120 },
+          },
+        },
+      }),
+    ],
+  });
+
+  app.document.getElementById('storefront-base-url').value = 'https://merchant.example/';
+  app.document.getElementById('audit-targets').value = 'Homepage | /';
+  app.document.getElementById('run-audit-btn').click();
+  await flush(app.window, 8);
+
+  assert.ok(app.document.getElementById('guide-step-1').classList.contains('is-done'), 'Step 1 should be done after URL is entered');
+  assert.ok(app.document.getElementById('guide-step-2').classList.contains('is-done'), 'Step 2 should be done after targets are set');
+  assert.ok(app.document.getElementById('guide-step-3').classList.contains('is-done'), 'Step 3 should be done after audit runs');
   app.dom.window.close();
 });
